@@ -4,19 +4,17 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
-import android.widget.Toast
 import com.vikas.android_mvvm.R
+import com.vikas.android_mvvm.models.dataclasses.Row
 import com.vikas.android_mvvm.viewmodels.CountryDetailViewModel
-
-import com.vikas.android_mvvm.views.dummy.DummyContent
-import com.vikas.android_mvvm.views.dummy.DummyContent.DummyItem
+import kotlinx.android.synthetic.main.fragment_countrydetail_list.*
 
 /**
  * A fragment representing a list of Items.
@@ -25,39 +23,47 @@ import com.vikas.android_mvvm.views.dummy.DummyContent.DummyItem
  */
 class CountryDetailFragment : Fragment() {
 
-    lateinit var countryDetailViewModel : CountryDetailViewModel
-
-    // TODO: Customize parameters
-    private var columnCount = 1
+    lateinit var countryDetailViewModel: CountryDetailViewModel
 
     private var listener: OnListFragmentInteractionListener? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        arguments?.let {
-            columnCount = it.getInt(ARG_COLUMN_COUNT)
-        }
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val view = inflater.inflate(R.layout.fragment_countrydetail_list, container, false)
         countryDetailViewModel = ViewModelProviders.of(this).get(CountryDetailViewModel::class.java)
-        countryDetailViewModel.countryDetails.observe(this, Observer {
-        })
+        setObservers()
         countryDetailViewModel.getCountryDetails()
-        // Set the adapter
-        if (view is RecyclerView) {
-            with(view) {
-                layoutManager = when {
-                    columnCount <= 1 -> LinearLayoutManager(context)
-                    else -> GridLayoutManager(context, columnCount)
-                }
-                adapter = MyCountryDetailRecyclerViewAdapter(DummyContent.ITEMS, listener)
-            }
-        }
         return view
+    }
+
+    private fun setObservers() {
+        countryDetailViewModel.countryDetailsList.observe(this, Observer {
+            list.adapter = MyCountryDetailRecyclerViewAdapter(it!!, listener)
+            swipeRefreshLayout.isRefreshing = false
+        })
+        countryDetailViewModel.isLoading.observe(this, Observer {
+            when (it) {
+                true -> progressBar.visibility = VISIBLE
+                false -> progressBar.visibility = GONE
+            }
+        })
+        countryDetailViewModel.errorMsg.observe(this, Observer {
+            swipeRefreshLayout.isRefreshing = false
+            Snackbar.make(list, it!!, Snackbar.LENGTH_SHORT).show()
+        })
+        countryDetailViewModel.appBarTitle.observe(this, Observer {
+            activity?.title = it!!
+        })
+    }
+
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        swipeRefreshLayout.setOnRefreshListener {
+            countryDetailViewModel.getCountryDetails()
+        }
     }
 
     override fun onAttach(context: Context) {
@@ -65,7 +71,7 @@ class CountryDetailFragment : Fragment() {
         if (context is OnListFragmentInteractionListener) {
             listener = context
         } else {
-            throw RuntimeException(context.toString() + " must implement OnListFragmentInteractionListener")
+            throw RuntimeException("$context must implement OnListFragmentInteractionListener")
         }
     }
 
@@ -79,29 +85,9 @@ class CountryDetailFragment : Fragment() {
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     *
-     *
-     * See the Android Training lesson
-     * [Communicating with Other Fragments](http://developer.android.com/training/basics/fragments/communicating.html)
-     * for more information.
      */
     interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        fun onListFragmentInteraction(item: DummyItem?)
-    }
-
-    companion object {
-
-        // TODO: Customize parameter argument names
-        const val ARG_COLUMN_COUNT = "column-count"
-
-        // TODO: Customize parameter initialization
-        @JvmStatic
-        fun newInstance(columnCount: Int) =
-                CountryDetailFragment().apply {
-                    arguments = Bundle().apply {
-                        putInt(ARG_COLUMN_COUNT, columnCount)
-                    }
-                }
+        fun onListFragmentInteraction(item: Row?)
     }
 }
