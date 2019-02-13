@@ -3,8 +3,12 @@ package com.vikas.android_mvvm.views
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import com.vikas.android_mvvm.R
+import com.vikas.android_mvvm.views.dummy.DummyContent
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), CountryDetailFragment.OnListFragmentInteractionListener {
+    override fun onListFragmentInteraction(item: DummyContent.DummyItem?) {
+
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

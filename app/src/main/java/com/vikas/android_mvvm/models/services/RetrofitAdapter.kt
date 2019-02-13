@@ -9,10 +9,12 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
+
 @Module
 class RetrofitAdapter {
-    @Provides
+
     @Singleton
+    @Provides
     fun getRemoteServiceInterface() : RemoteServiceInterface{
         return getRetrofit().create(RemoteServiceInterface::class.java)
     }
