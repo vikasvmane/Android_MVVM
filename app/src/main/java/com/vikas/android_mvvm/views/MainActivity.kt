@@ -1,7 +1,8 @@
-package com.vikas.android_mvvm
+package com.vikas.android_mvvm.views
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import com.vikas.android_mvvm.R
 
 class MainActivity : AppCompatActivity() {
 
