@@ -6,7 +6,7 @@ data class Row(
         @SerializedName("description")
         var description: String?,
         @SerializedName("imageHref")
-        var imageHref: Any?,
+        var imageHref: String?,
         @SerializedName("title")
         var title: String?
 )

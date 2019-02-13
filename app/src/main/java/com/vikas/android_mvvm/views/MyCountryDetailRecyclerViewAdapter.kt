@@ -5,7 +5,9 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
+import com.squareup.picasso.Picasso
 import com.vikas.android_mvvm.R
 import com.vikas.android_mvvm.models.dataclasses.Row
 import com.vikas.android_mvvm.views.CountryDetailFragment.OnListFragmentInteractionListener
@@ -17,9 +19,9 @@ import kotlinx.android.synthetic.main.fragment_countrydetail.view.*
  * TODO: Replace the implementation with code for your data type.
  */
 class MyCountryDetailRecyclerViewAdapter(
-        private val mValues: List<Row?>,
-        private val mListener: OnListFragmentInteractionListener?)
-    : RecyclerView.Adapter<MyCountryDetailRecyclerViewAdapter.ViewHolder>() {
+    private val mValues: List<Row?>,
+    private val mListener: OnListFragmentInteractionListener?
+) : RecyclerView.Adapter<MyCountryDetailRecyclerViewAdapter.ViewHolder>() {
 
     private val mOnClickListener: View.OnClickListener
 
@@ -34,15 +36,16 @@ class MyCountryDetailRecyclerViewAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.fragment_countrydetail, parent, false)
+            .inflate(R.layout.fragment_countrydetail, parent, false)
         return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = mValues[position]
-        holder.mIdView.text = item?.title
-        holder.mContentView.text = item?.description
-
+        holder.mTitle.text = item?.title
+        holder.mDescription.text = item?.description
+        if (item?.imageHref != null)
+            Picasso.get().load(item.imageHref).into(holder.mThumb)
         with(holder.mView) {
             tag = item
             setOnClickListener(mOnClickListener)
@@ -52,11 +55,12 @@ class MyCountryDetailRecyclerViewAdapter(
     override fun getItemCount(): Int = mValues.size
 
     inner class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
-        val mIdView: TextView = mView.item_number
-        val mContentView: TextView = mView.content
+        val mTitle: TextView = mView.txtTitle
+        val mDescription: TextView = mView.txtDescription
+        val mThumb: ImageView = mView.imgThumb
 
         override fun toString(): String {
-            return super.toString() + " '" + mContentView.text + "'"
+            return super.toString() + " '" + mDescription.text + "'"
         }
     }
 }
