@@ -27,6 +27,6 @@ class MainActivity : AppCompatActivity(), CountryDetailFragment.OnListFragmentIn
      *  Returns [Row] object on click of a row in recyclerview
      */
     override fun onListFragmentInteraction(item: Row?) {
-        Toast.makeText(this, """${item!!.title} clicked""",Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, """${item!!.title} clicked""", Toast.LENGTH_SHORT).show()
     }
 }

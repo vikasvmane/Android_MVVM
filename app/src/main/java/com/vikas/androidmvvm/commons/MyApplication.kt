@@ -7,7 +7,7 @@ import com.vikas.androidmvvm.models.services.RetrofitAdapter
 
 class MyApplication : Application() {
     companion object {
-        @JvmStatic lateinit var appComponent: AppComponent
+        lateinit var appComponent: AppComponent
     }
 
     override fun onCreate() {

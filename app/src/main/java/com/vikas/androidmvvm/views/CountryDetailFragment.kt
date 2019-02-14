@@ -12,6 +12,7 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import com.vikas.androidmvvm.R
+import com.vikas.androidmvvm.commons.IntentExtras.KEY_IS_DATA_LOADED
 import com.vikas.androidmvvm.models.dataclasses.Row
 import com.vikas.androidmvvm.viewmodels.CountryDetailViewModel
 import kotlinx.android.synthetic.main.fragment_countrydetail_list.*
@@ -23,46 +24,45 @@ import kotlinx.android.synthetic.main.fragment_countrydetail_list.*
  */
 class CountryDetailFragment : Fragment() {
 
-    private lateinit var countryDetailViewModel: CountryDetailViewModel
+    private var countryDetailViewModel: CountryDetailViewModel? =null
 
     private var listener: OnListFragmentInteractionListener? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        retainInstance = true
-    }
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_countrydetail_list, container, false)
-        countryDetailViewModel = ViewModelProviders.of(this).get(CountryDetailViewModel::class.java)
-        setObservers()
-        countryDetailViewModel.getCountryDetails()
+        if (savedInstanceState==null ||
+                !savedInstanceState.containsKey(KEY_IS_DATA_LOADED) ||
+                savedInstanceState.getBoolean(KEY_IS_DATA_LOADED) || countryDetailViewModel==null) {
+            countryDetailViewModel = ViewModelProviders.of(activity!!).get(CountryDetailViewModel::class.java)
+            setObservers()
+            countryDetailViewModel?.getCountryDetails()
+        }
         return view
     }
 
     private fun setObservers() {
-        countryDetailViewModel.countryDetailsList.observe(this, Observer {
+        countryDetailViewModel?.countryDetailsList?.observe(this, Observer {
             list.adapter = MyCountryDetailRecyclerViewAdapter(it!!, listener)
             llNoDataMessage.visibility = GONE
             swipeRefreshLayout.isRefreshing = false
         })
-        countryDetailViewModel.isLoading.observe(this, Observer {
+        countryDetailViewModel?.isLoading?.observe(this, Observer {
             when (it) {
                 true -> progressBar.visibility = VISIBLE
                 false -> progressBar.visibility = GONE
             }
         })
-        countryDetailViewModel.errorMsg.observe(this, Observer {
+        countryDetailViewModel?.errorMsg?.observe(this, Observer {
             swipeRefreshLayout.isRefreshing = false
-            if (countryDetailViewModel.countryDetailsList.value.isNullOrEmpty())
+            if (countryDetailViewModel?.countryDetailsList?.value.isNullOrEmpty())
                 llNoDataMessage.visibility = VISIBLE
             Snackbar.make(list, it!!, Snackbar.LENGTH_SHORT).show()
 
         })
-        countryDetailViewModel.appBarTitle.observe(this, Observer {
+        countryDetailViewModel?.appBarTitle?.observe(this, Observer {
             activity?.title = it!!
         })
     }
@@ -71,7 +71,7 @@ class CountryDetailFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         swipeRefreshLayout.setOnRefreshListener {
-            countryDetailViewModel.getCountryDetails()
+            countryDetailViewModel?.getCountryDetails()
         }
     }
 
@@ -98,5 +98,11 @@ class CountryDetailFragment : Fragment() {
     interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
         fun onListFragmentInteraction(item: Row?)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(KEY_IS_DATA_LOADED, countryDetailViewModel?.countryDetailsList?.value.isNullOrEmpty())
+
     }
 }
