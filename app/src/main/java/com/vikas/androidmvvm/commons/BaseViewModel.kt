@@ -1,4 +1,4 @@
-package com.vikas.android_mvvm.commons
+package com.vikas.androidmvvm.commons
 
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel

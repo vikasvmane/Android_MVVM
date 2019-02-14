@@ -1,17 +1,18 @@
-package com.vikas.android_mvvm.views
+package com.vikas.androidmvvm.views
 
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.squareup.picasso.Picasso
-import com.vikas.android_mvvm.R
-import com.vikas.android_mvvm.models.dataclasses.Row
-import com.vikas.android_mvvm.views.CountryDetailFragment.OnListFragmentInteractionListener
+import com.vikas.androidmvvm.R
+import com.vikas.androidmvvm.models.dataclasses.Row
+import com.vikas.androidmvvm.views.CountryDetailFragment.OnListFragmentInteractionListener
 import kotlinx.android.synthetic.main.fragment_countrydetail.view.*
 
 /**
@@ -20,7 +21,7 @@ import kotlinx.android.synthetic.main.fragment_countrydetail.view.*
  * TODO: Replace the implementation with code for your data type.
  */
 class MyCountryDetailRecyclerViewAdapter(
-    private val mValues: List<Row?>,
+    private var mValues: List<Row?>,
     private val mListener: OnListFragmentInteractionListener?
 ) : RecyclerView.Adapter<MyCountryDetailRecyclerViewAdapter.ViewHolder>() {
 
@@ -45,11 +46,15 @@ class MyCountryDetailRecyclerViewAdapter(
         val item = mValues[position]
         holder.mTitle.text = item?.title
         holder.mDescription.text = item?.description
-      //  if (item?.imageHref != null) {
+        if (item?.imageHref != null) {
             holder.mThumb.visibility = VISIBLE
-            Picasso.get().load(item?.imageHref).into(holder.mThumb)
-        /*} else
-            holder.mThumb.visibility = GONE*/
+            Picasso.get().
+                    load(item.imageHref)
+                    .error(R.drawable.ic_photo_size_select_actual_black_24dp)
+                    .placeholder(R.drawable.ic_photo_size_select_actual_black_24dp)
+                    .into(holder.mThumb)
+        } else
+            holder.mThumb.visibility = GONE
         with(holder.mView) {
             tag = item
             setOnClickListener(mOnClickListener)

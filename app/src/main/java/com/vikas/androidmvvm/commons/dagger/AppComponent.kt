@@ -1,7 +1,7 @@
-package com.vikas.android_mvvm.commons.dagger
+package com.vikas.androidmvvm.commons.dagger
 
-import com.vikas.android_mvvm.models.services.RetrofitAdapter
-import com.vikas.android_mvvm.viewmodels.CountryDetailViewModel
+import com.vikas.androidmvvm.models.services.RetrofitAdapter
+import com.vikas.androidmvvm.viewmodels.CountryDetailViewModel
 import dagger.Component
 import javax.inject.Singleton
 

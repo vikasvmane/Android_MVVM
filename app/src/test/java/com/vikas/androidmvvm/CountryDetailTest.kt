@@ -1,12 +1,11 @@
-package com.vikas.android_mvvm
+package com.vikas.androidmvvm
 
 import android.app.Application
-import com.vikas.android_mvvm.models.dataclasses.FactsResponse
-import com.vikas.android_mvvm.models.dataclasses.Row
-import com.vikas.android_mvvm.models.repositories.CountryDetailRepository
-import com.vikas.android_mvvm.models.services.RemoteServiceInterface
-import com.vikas.android_mvvm.viewmodels.CountryDetailViewModel
-import org.junit.Assert
+import com.vikas.androidmvvm.models.dataclasses.FactsResponse
+import com.vikas.androidmvvm.models.dataclasses.Row
+import com.vikas.androidmvvm.models.repositories.CountryDetailRepository
+import com.vikas.androidmvvm.models.services.RemoteServiceInterface
+import com.vikas.androidmvvm.viewmodels.CountryDetailViewModel
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith

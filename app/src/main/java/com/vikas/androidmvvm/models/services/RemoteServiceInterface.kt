@@ -1,6 +1,6 @@
-package com.vikas.android_mvvm.models.services
+package com.vikas.androidmvvm.models.services
 
-import com.vikas.android_mvvm.models.dataclasses.FactsResponse
+import com.vikas.androidmvvm.models.dataclasses.FactsResponse
 import retrofit2.Call
 import retrofit2.http.GET
 

@@ -1,6 +1,6 @@
-package com.vikas.android_mvvm.models.services
+package com.vikas.androidmvvm.models.services
 
-import com.vikas.android_mvvm.BuildConfig
+import com.vikas.androidmvvm.BuildConfig
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient

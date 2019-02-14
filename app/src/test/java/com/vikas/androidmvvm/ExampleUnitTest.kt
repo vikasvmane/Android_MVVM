@@ -1,4 +1,4 @@
-package com.vikas.android_mvvm
+package com.vikas.androidmvvm
 
 import org.junit.Test
 

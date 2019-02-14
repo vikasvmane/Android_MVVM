@@ -1,4 +1,4 @@
-package com.vikas.android_mvvm.models.dataclasses
+package com.vikas.androidmvvm.models.dataclasses
 
 import com.google.gson.annotations.SerializedName
 

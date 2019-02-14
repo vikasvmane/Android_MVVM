@@ -1,4 +1,4 @@
-package com.vikas.android_mvvm.views
+package com.vikas.androidmvvm.views
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
@@ -11,9 +11,9 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import com.vikas.android_mvvm.R
-import com.vikas.android_mvvm.models.dataclasses.Row
-import com.vikas.android_mvvm.viewmodels.CountryDetailViewModel
+import com.vikas.androidmvvm.R
+import com.vikas.androidmvvm.models.dataclasses.Row
+import com.vikas.androidmvvm.viewmodels.CountryDetailViewModel
 import kotlinx.android.synthetic.main.fragment_countrydetail_list.*
 
 /**
@@ -23,7 +23,7 @@ import kotlinx.android.synthetic.main.fragment_countrydetail_list.*
  */
 class CountryDetailFragment : Fragment() {
 
-    lateinit var countryDetailViewModel: CountryDetailViewModel
+    private lateinit var countryDetailViewModel: CountryDetailViewModel
 
     private var listener: OnListFragmentInteractionListener? = null
 
@@ -31,9 +31,10 @@ class CountryDetailFragment : Fragment() {
         super.onCreate(savedInstanceState)
         retainInstance = true
     }
+
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_countrydetail_list, container, false)
         countryDetailViewModel = ViewModelProviders.of(this).get(CountryDetailViewModel::class.java)
@@ -45,6 +46,7 @@ class CountryDetailFragment : Fragment() {
     private fun setObservers() {
         countryDetailViewModel.countryDetailsList.observe(this, Observer {
             list.adapter = MyCountryDetailRecyclerViewAdapter(it!!, listener)
+            llNoDataMessage.visibility = GONE
             swipeRefreshLayout.isRefreshing = false
         })
         countryDetailViewModel.isLoading.observe(this, Observer {
@@ -55,7 +57,10 @@ class CountryDetailFragment : Fragment() {
         })
         countryDetailViewModel.errorMsg.observe(this, Observer {
             swipeRefreshLayout.isRefreshing = false
+            if (countryDetailViewModel.countryDetailsList.value.isNullOrEmpty())
+                llNoDataMessage.visibility = VISIBLE
             Snackbar.make(list, it!!, Snackbar.LENGTH_SHORT).show()
+
         })
         countryDetailViewModel.appBarTitle.observe(this, Observer {
             activity?.title = it!!

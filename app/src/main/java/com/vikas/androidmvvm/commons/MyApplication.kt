@@ -1,9 +1,9 @@
-package com.vikas.android_mvvm.commons
+package com.vikas.androidmvvm.commons
 
 import android.app.Application
-import com.vikas.android_mvvm.commons.dagger.AppComponent
-import com.vikas.android_mvvm.commons.dagger.DaggerAppComponent
-import com.vikas.android_mvvm.models.services.RetrofitAdapter
+import com.vikas.androidmvvm.commons.dagger.AppComponent
+import com.vikas.androidmvvm.commons.dagger.DaggerAppComponent
+import com.vikas.androidmvvm.models.services.RetrofitAdapter
 
 class MyApplication : Application() {
     companion object {

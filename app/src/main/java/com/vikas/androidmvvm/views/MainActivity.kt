@@ -1,9 +1,9 @@
-package com.vikas.android_mvvm.views
+package com.vikas.androidmvvm.views
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import com.vikas.android_mvvm.R
-import com.vikas.android_mvvm.models.dataclasses.Row
+import com.vikas.androidmvvm.R
+import com.vikas.androidmvvm.models.dataclasses.Row
 
 class MainActivity : AppCompatActivity(), CountryDetailFragment.OnListFragmentInteractionListener {
     override fun onCreate(savedInstanceState: Bundle?) {

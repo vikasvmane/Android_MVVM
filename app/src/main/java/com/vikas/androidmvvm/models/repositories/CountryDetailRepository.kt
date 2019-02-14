@@ -1,7 +1,7 @@
-package com.vikas.android_mvvm.models.repositories
+package com.vikas.androidmvvm.models.repositories
 
-import com.vikas.android_mvvm.models.dataclasses.FactsResponse
-import com.vikas.android_mvvm.models.services.RemoteServiceInterface
+import com.vikas.androidmvvm.models.dataclasses.FactsResponse
+import com.vikas.androidmvvm.models.services.RemoteServiceInterface
 import retrofit2.Call
 import retrofit2.Callback
 
