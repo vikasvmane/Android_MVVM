@@ -1,6 +1,7 @@
 package com.vikas.androidmvvm.views
 
 
+import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -9,8 +10,10 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import com.squareup.picasso.Picasso
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.vikas.androidmvvm.R
+import com.vikas.androidmvvm.commons.GlideApp
 import com.vikas.androidmvvm.models.dataclasses.Row
 import com.vikas.androidmvvm.views.CountryDetailFragment.OnListFragmentInteractionListener
 import kotlinx.android.synthetic.main.fragment_countrydetail.view.*
@@ -21,9 +24,10 @@ import kotlinx.android.synthetic.main.fragment_countrydetail.view.*
  * TODO: Replace the implementation with code for your data type.
  */
 class MyCountryDetailRecyclerViewAdapter(
-    private var mValues: List<Row?>,
-    private val mListener: OnListFragmentInteractionListener?
+        private var mValues: List<Row?>,
+        private val mListener: OnListFragmentInteractionListener?
 ) : RecyclerView.Adapter<MyCountryDetailRecyclerViewAdapter.ViewHolder>() {
+    private lateinit var context: Context
 
     private val mOnClickListener: View.OnClickListener
 
@@ -38,7 +42,8 @@ class MyCountryDetailRecyclerViewAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.fragment_countrydetail, parent, false)
+                .inflate(R.layout.fragment_countrydetail, parent, false)
+        context = parent.context
         return ViewHolder(view)
     }
 
@@ -47,14 +52,17 @@ class MyCountryDetailRecyclerViewAdapter(
         holder.mTitle.text = item?.title
         holder.mDescription.text = item?.description
         if (item?.imageHref != null) {
-            holder.mThumb.visibility = VISIBLE
-            Picasso.get().
-                    load(item.imageHref)
+            GlideApp.with(context)
+                    .asBitmap()
+                    .load(item.imageHref)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .error(R.drawable.ic_photo_size_select_actual_black_24dp)
                     .placeholder(R.drawable.ic_photo_size_select_actual_black_24dp)
                     .into(holder.mThumb)
-        } else
-            holder.mThumb.visibility = GONE
+
+        } else {
+            holder.mThumb.setImageDrawable(null)
+        }
         with(holder.mView) {
             tag = item
             setOnClickListener(mOnClickListener)
