@@ -4,6 +4,7 @@ package com.vikas.android_mvvm.views
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
@@ -44,8 +45,11 @@ class MyCountryDetailRecyclerViewAdapter(
         val item = mValues[position]
         holder.mTitle.text = item?.title
         holder.mDescription.text = item?.description
-        if (item?.imageHref != null)
-            Picasso.get().load(item.imageHref).into(holder.mThumb)
+      //  if (item?.imageHref != null) {
+            holder.mThumb.visibility = VISIBLE
+            Picasso.get().load(item?.imageHref).into(holder.mThumb)
+        /*} else
+            holder.mThumb.visibility = GONE*/
         with(holder.mView) {
             tag = item
             setOnClickListener(mOnClickListener)
