@@ -19,7 +19,7 @@
             android:layout_marginRight="16dp"
             app:layoutManager="LinearLayoutManager"
             tools:context=".views.CountryDetailFragment"
-            tools:listitem="@layout/fragment_countrydetail" />
+            tools:listitem="@layout/country_detail_item" />
     </android.support.v4.widget.SwipeRefreshLayout>
 
     <LinearLayout

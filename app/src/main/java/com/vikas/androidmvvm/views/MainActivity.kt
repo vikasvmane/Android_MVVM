@@ -13,6 +13,9 @@ class MainActivity : AppCompatActivity(), CountryDetailFragment.OnListFragmentIn
         setListFragment()
     }
 
+    /**
+     * Creates and add fragment to the container
+     */
     private fun setListFragment() {
         var fragment = supportFragmentManager.findFragmentByTag("CountryFragmentTag")
         if (fragment == null) {
@@ -24,7 +27,7 @@ class MainActivity : AppCompatActivity(), CountryDetailFragment.OnListFragmentIn
     }
 
     /**
-     *  Returns [Row] object on click of a row in recyclerview
+     *  Returns [Row] object on click of a row in recyclerview. Acts as a callback
      */
     override fun onListFragmentInteraction(item: Row?) {
         Toast.makeText(this, """${item!!.title} clicked""", Toast.LENGTH_SHORT).show()

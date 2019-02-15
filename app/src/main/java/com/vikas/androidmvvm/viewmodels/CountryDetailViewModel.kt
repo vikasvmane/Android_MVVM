@@ -15,10 +15,13 @@ import retrofit2.Callback
 import retrofit2.Response
 import javax.inject.Inject
 
+/**
+ * ViewModel Class Responsible for all the business logic. It acts as a mediator between Model(data) layer and View layer
+ */
 class CountryDetailViewModel(application: Application) : BaseViewModel(application) {
     var countryDetailsList = MutableLiveData<List<Row?>>()
     var appBarTitle = MutableLiveData<String>()
-    private var disposable: Call<FactsResponse>? = null
+    private var call: Call<FactsResponse>? = null
 
     @Inject
     lateinit var serviceInterface: RemoteServiceInterface
@@ -29,10 +32,13 @@ class CountryDetailViewModel(application: Application) : BaseViewModel(applicati
         countryDetailRepository = CountryDetailRepository(serviceInterface)
     }
 
+    /**
+     * Fetches Country details from repository class.
+     */
     fun getCountryDetails() {
         if (Utils.isInternetConnected(getApplication())) {
             isLoading.value = true
-            disposable = countryDetailRepository.fetchCountryDetail(object : Callback<FactsResponse> {
+            call = countryDetailRepository.fetchCountryDetail(object : Callback<FactsResponse> {
                 /**
                  * Invoked when a network exception occurred talking to the server or when an unexpected
                  * exception occurred creating the request or processing the response.
@@ -67,10 +73,13 @@ class CountryDetailViewModel(application: Application) : BaseViewModel(applicati
         }
     }
 
+    /**
+     * Gets called on ViewModel is destroyed. Can be used to free resources
+     */
     override fun onCleared() {
         super.onCleared()
-        if (disposable != null)
-            disposable!!.cancel()
+        if (call != null)
+            call!!.cancel()
 
     }
 }
