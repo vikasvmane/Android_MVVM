@@ -1,15 +1,20 @@
 package com.vikas.androidmvvm
 
+import android.arch.core.executor.testing.InstantTaskExecutorRule
+import android.arch.lifecycle.*
 import com.vikas.androidmvvm.models.dataclasses.FactsResponse
 import com.vikas.androidmvvm.models.dataclasses.Row
 import com.vikas.androidmvvm.models.repositories.CountryDetailRepository
 import com.vikas.androidmvvm.models.services.RemoteServiceInterface
 import com.vikas.androidmvvm.viewmodels.CountryDetailViewModel
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.Mockito
+import org.mockito.Mockito.mock
+import org.mockito.Mockito.verify
 import org.mockito.MockitoAnnotations
 import org.mockito.junit.MockitoJUnitRunner
 import retrofit2.Call
@@ -21,14 +26,32 @@ class CountryDetailTest {
 
     lateinit var countryDetailViewModel: CountryDetailViewModel
     @Mock
+    lateinit var errorObserver : Observer<String>
+
+    var errorLiveData = MutableLiveData<String>()
+
+    @Mock
+    var countryDetailsList :MutableLiveData<List<Row?>>?=null
+
+
+    @Mock
     var countryDetailRepository: CountryDetailRepository?=null
+
     @Mock
     lateinit var serviceInterface : RemoteServiceInterface
+
     @Mock
     lateinit var callback : Callback<FactsResponse>
+
     @Mock
     lateinit var call : Call<FactsResponse>
 
+    @Mock
+    var observer : Observer<List<Row?>>? = null
+
+    @Rule
+    @JvmField
+    val instantExecutorRule = InstantTaskExecutorRule()
 
     @Before
     fun setUp() {
@@ -39,8 +62,8 @@ class CountryDetailTest {
     @Test
     fun testGetCountryDetail(){
         countryDetailViewModel.getCountryDetails()
-        Mockito.`when`(countryDetailRepository?.fetchCountryDetail(callback)).thenReturn(call)
-        Mockito.verify(countryDetailRepository,Mockito.times(1))?.fetchCountryDetail(callback)
+       // Mockito.`when`(countryDetailRepository?.fetchCountryDetail(callback)).thenReturn(call)
+        Mockito.verify(countryDetailRepository,Mockito.times(1))?.fetchCountryDetail(callback)?.enqueue(callback)
     }
     @Test
     fun testHandleGetCountryDetail_Success() {
@@ -53,18 +76,23 @@ class CountryDetailTest {
         list.add(Row("","",""))
         list.add(Row("","",""))
         Mockito.doReturn(list).`when`(apiCountryDetails).rows
-        countryDetailViewModel.countryDetailsList.value = apiCountryDetails.rows
-        Mockito.verify(countryDetailViewModel.countryDetailsList,Mockito.times(1)).postValue(apiCountryDetails.rows)
+
+        countryDetailsList?.observeForever(observer!!)
+        countryDetailsList?.value = apiCountryDetails.rows
+        Mockito.verify(observer)?.onChanged(apiCountryDetails.rows)
     }
     @Test
     fun testHandleGetCountryDetail_Failure(){
         val response = Mockito.mock(Response::class.java)
         Mockito.doReturn(false).`when`(response).isSuccessful
-      //  countryDetailViewModel.
+
+      //  errorLiveData.
     }
     @Test
     fun testHandleError(){
-        countryDetailViewModel.errorMsg.value = "Error"
-      //  Mockito.verify()
+        errorLiveData.observeForever(errorObserver)
+
+        errorLiveData.value = "Error"
+        verify(errorObserver).onChanged("Error")
     }
 }
