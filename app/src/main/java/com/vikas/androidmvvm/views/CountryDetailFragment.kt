@@ -33,11 +33,11 @@ class CountryDetailFragment : Fragment() {
             savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_countrydetail_list, container, false)
+        countryDetailViewModel = ViewModelProviders.of(activity!!).get(CountryDetailViewModel::class.java)
+        setObservers()
         if (savedInstanceState==null ||
                 !savedInstanceState.containsKey(KEY_IS_DATA_LOADED) ||
                 savedInstanceState.getBoolean(KEY_IS_DATA_LOADED) || countryDetailViewModel==null) {
-            countryDetailViewModel = ViewModelProviders.of(activity!!).get(CountryDetailViewModel::class.java)
-            setObservers()
             countryDetailViewModel?.getCountryDetails()
         }
         return view

@@ -1,6 +1,7 @@
 package com.vikas.androidmvvm
 
 import android.app.Application
+import android.content.Context
 import com.vikas.androidmvvm.models.dataclasses.FactsResponse
 import com.vikas.androidmvvm.models.dataclasses.Row
 import com.vikas.androidmvvm.models.repositories.CountryDetailRepository
@@ -11,6 +12,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.Mockito
+import org.mockito.Mockito.mock
 import org.mockito.MockitoAnnotations
 import org.mockito.junit.MockitoJUnitRunner
 import retrofit2.Call
@@ -23,21 +25,17 @@ class CountryDetailTest {
     lateinit var countryDetailRepository: CountryDetailRepository
 
     @Mock
-    lateinit var serviceInterface : RemoteServiceInterface
-    @Mock
-    lateinit var context : Application
+    var context : Application? = null
     @Mock
     lateinit var callback : Callback<FactsResponse>
     @Mock
     lateinit var call : Call<FactsResponse>
-    @Mock
-    lateinit var listResponse : List<Row?>
 
 
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
-        countryDetailViewModel = CountryDetailViewModel(context)
+        countryDetailViewModel = CountryDetailViewModel(context!!)
         countryDetailRepository = CountryDetailRepository(serviceInterface)
 
     }
