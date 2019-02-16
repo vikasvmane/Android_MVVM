@@ -62,8 +62,7 @@ class CountryDetailTest {
     @Test
     fun testGetCountryDetail(){
         countryDetailViewModel.getCountryDetails()
-       // Mockito.`when`(countryDetailRepository?.fetchCountryDetail(callback)).thenReturn(call)
-        Mockito.verify(countryDetailRepository,Mockito.times(1))?.fetchCountryDetail(callback)?.enqueue(callback)
+        Mockito.verify(countryDetailRepository,Mockito.times(1))?.fetchCountryDetail(callback)
     }
     @Test
     fun testHandleGetCountryDetail_Success() {

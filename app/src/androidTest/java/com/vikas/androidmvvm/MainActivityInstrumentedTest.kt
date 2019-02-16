@@ -1,5 +1,6 @@
 package com.vikas.androidmvvm
 
+import android.arch.lifecycle.ViewModelProviders
 import android.support.test.InstrumentationRegistry
 import android.support.test.InstrumentationRegistry.getInstrumentation
 import android.support.test.espresso.Espresso
@@ -13,13 +14,23 @@ import android.support.test.espresso.matcher.ViewMatchers.isDisplayed
 import android.support.test.espresso.matcher.ViewMatchers.withId
 import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
+import android.support.v4.app.Fragment
 import android.support.v7.widget.RecyclerView
 import android.view.View
+import android.widget.FrameLayout
+import android.widget.ProgressBar
+import com.vikas.androidmvvm.viewmodels.CountryDetailViewModel
+import com.vikas.androidmvvm.views.CountryDetailFragment
 import com.vikas.androidmvvm.views.MainActivity
+import com.vikas.androidmvvm.views.MyCountryDetailRecyclerViewAdapter
+import org.hamcrest.CoreMatchers.instanceOf
+import org.hamcrest.Matchers.greaterThan
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertThat
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.junit.MockitoJUnit.rule
 
 
 /**
@@ -64,4 +75,31 @@ class MainActivityInstrumentedTest {
 
         override fun perform(uiController: UiController, view: View) = click().perform(uiController, view.findViewById<View>(viewId))
     }
+    /*@Test
+    fun testInsureFrameLayout(){
+        val activity = mainActivityActivityTestRule.activity
+        val viewById = activity.findViewById(R.id.flContainer) as View
+        assertThat(viewById, instanceOf(FrameLayout::class.java))
+
+        val fragmentList = activity.supportFragmentManager.fragments
+        assertEquals(fragmentList.size, 1)
+        var fragment = fragmentList.get(0) as Fragment
+        assertThat(fragmentList.get(0), instanceOf(CountryDetailFragment::class.java))
+        fragment = fragment as CountryDetailFragment
+
+        // fragment testing
+        val view = fragment.getView()
+        var recyclerView = view?.findViewById(R.id.list) as RecyclerView
+        assertThat(recyclerView, instanceOf(RecyclerView::class.java))
+        assertEquals((view.findViewById(R.id.progressBar) as ProgressBar).visibility, View.VISIBLE)
+        recyclerView = recyclerView
+
+        var newsViewModel = ViewModelProviders.of(activity).get(CountryDetailViewModel::class.java)
+        newsViewModel.getCountryDetails()
+        Thread.sleep(4000)
+        assertEquals((view.findViewById(R.id.progressBar) as ProgressBar).visibility, View.VISIBLE)
+        var newsAdapter = (recyclerView as RecyclerView).adapter as MyCountryDetailRecyclerViewAdapter?
+
+        val count = newsAdapter?.getItemCount()
+        assertThat(count, greaterThan(0)!!)}*/
 }
